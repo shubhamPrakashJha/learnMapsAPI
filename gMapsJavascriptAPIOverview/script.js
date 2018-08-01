@@ -8,22 +8,22 @@ function initMap() {
         },
         zoom: 13
     });
-    var tribeca = {
-        lat: 40.719526,
-        lng: -74.0089934
-    };
-    var marker = new google.maps.Marker({
-        position: tribeca,
-        map: map,
-        title: "First Marker",
-        draggable: true,
-        animation: google.maps.Animation.DROP
-    });
-    var infoWindow = new google.maps.InfoWindow({
-        content: "This is a Info Window displaying info about the marker"
-    });
-
-    marker.addListener('click', function () {
-        infoWindow.open(map,marker);
-    })
+    // var tribeca = {
+    //     lat: 40.719526,
+    //     lng: -74.0089934
+    // };
+    // var marker = new google.maps.Marker({
+    //     position: tribeca,
+    //     map: map,
+    //     title: "First Marker",
+    //     draggable: true,
+    //     animation: google.maps.Animation.DROP
+    // });
+    // var infoWindow = new google.maps.InfoWindow({
+    //     content: "This is a Info Window displaying info about the marker"
+    // });
+    //
+    // marker.addListener('click', function () {
+    //     infoWindow.open(map,marker);
+    // });
 }
