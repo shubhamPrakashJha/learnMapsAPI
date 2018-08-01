@@ -14,6 +14,9 @@ function initMap() {
     };
     var marker = new google.maps.Marker({
         position: tribeca,
-        map: map
+        map: map,
+        title: "First Marker",
+        draggable: true,
+        animation: google.maps.Animation.DROP
     });
 }
