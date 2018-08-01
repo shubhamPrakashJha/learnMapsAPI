@@ -17,6 +17,20 @@ function initMap() {
         {title: 'TriBeCa Artsy Bachelor Pad', location: {lat: 40.7195264, lng: -74.0089934}},
         {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
     ];
+
+    for (var i = 0; i < locations.length; i++) {
+        var title = locations[i].title;
+        var location = locations[i].location;
+
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map,
+            title: title,
+            animation: google.maps.Animation.BOUNCE,
+            id: i
+        });
+        markers.push(marker);
+    }
     // var tribeca = {
     //     lat: 40.719526,
     //     lng: -74.0089934
