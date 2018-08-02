@@ -18,6 +18,8 @@ function initMap() {
         {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
     ];
 
+    largeInfoWindow = new google.maps.InfoWindow();
+
     for (var i = 0; i < locations.length; i++) {
         var title = locations[i].title;
         var location = locations[i].location;
@@ -30,7 +32,22 @@ function initMap() {
             id: i
         });
         markers.push(marker);
+        marker.addListener('click',function () {
+            populateInfoWindow(this, largeInfoWindow)
+        });
     }
+
+    function populateInfoWindow(marker, infowindow) {
+        if(infowindow.marker != marker){
+            infowindow.marker = marker;
+            infowindow.setContent('<div>'+marker.title+'</div>');
+            infowindow.open(map,marker);
+            infowindow.addListener('click', function () {
+                infowindow.setMarker(null);
+            })
+        }
+    }
+
     // var tribeca = {
     //     lat: 40.719526,
     //     lng: -74.0089934
