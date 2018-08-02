@@ -18,7 +18,8 @@ function initMap() {
         {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
     ];
 
-    largeInfoWindow = new google.maps.InfoWindow();
+    var largeInfoWindow = new google.maps.InfoWindow();
+
 
     for (var i = 0; i < locations.length; i++) {
         var title = locations[i].title;
@@ -42,9 +43,9 @@ function initMap() {
             infowindow.marker = marker;
             infowindow.setContent('<div>'+marker.title+'</div>');
             infowindow.open(map,marker);
-            infowindow.addListener('click', function () {
+            infowindow.addListener('closeclick', function () {
                 infowindow.setMarker(null);
-            })
+            });
         }
     }
 
