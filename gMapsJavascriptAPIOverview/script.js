@@ -38,6 +38,9 @@ function initMap() {
         });
         bounds.extend(marker.position);
         map.fitBounds(bounds);
+
+        document.getElementById('show-listining').addEventListener('click',showListinings);
+        document.getElementById('hide-listining').addEventListener('click',hideListinings);
     }
 
     function populateInfoWindow(marker, infowindow) {
