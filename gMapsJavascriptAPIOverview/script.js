@@ -19,7 +19,7 @@ function initMap() {
     ];
 
     var largeInfoWindow = new google.maps.InfoWindow();
-
+    var bounds = new google.maps.LatLngBounds();
 
     for (var i = 0; i < locations.length; i++) {
         var title = locations[i].title;
@@ -36,6 +36,8 @@ function initMap() {
         marker.addListener('click',function () {
             populateInfoWindow(this, largeInfoWindow)
         });
+        bounds.extend(marker.position);
+        map.fitBounds(bounds);
     }
 
     function populateInfoWindow(marker, infowindow) {
