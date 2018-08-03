@@ -104,6 +104,9 @@ function initMap() {
         {title: 'TriBeCa Artsy Bachelor Pad', location: {lat: 40.7195264, lng: -74.0089934}},
         {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
     ];
+    //
+    var defaultIcon = makeMarkerIcon('red-dot');
+    var highlightedIcon = makeMarkerIcon('blue-dot');
 
     var largeInfoWindow = new google.maps.InfoWindow();
 
@@ -113,6 +116,7 @@ function initMap() {
 
         var marker = new google.maps.Marker({
             position: location,
+            icon: defaultIcon,
             title: title,
             animation: google.maps.Animation.BOUNCE,
             id: i
@@ -120,6 +124,12 @@ function initMap() {
         markers.push(marker);
         marker.addListener('click',function () {
             populateInfoWindow(this, largeInfoWindow)
+        });
+        marker.addListener('mouseover', function () {
+            this.setIcon(highlightedIcon);
+        });
+        marker.addListener('mouseout', function () {
+            this.setIcon(defaultIcon);
         });
 
         document.getElementById('show-listings').addEventListener('click',showListings);
@@ -150,6 +160,17 @@ function initMap() {
         for(var i = 0; i < markers.length; i++){
             markers[i].setMap(null);
         }
+    }
+
+    function makeMarkerIcon(markerColor) {
+        var markerImage = {
+            url: "http://maps.google.com/mapfiles/ms/icons/"+markerColor+".png",
+            size: new google.maps.Size(71,71),
+            origin: new google.maps.Point(0,0),
+            anchor: new google.maps.Point(17,34),
+            scaledSize: new google.maps.Size(50,50)
+        };
+        return markerImage;
     }
 
     // var tribeca = {
