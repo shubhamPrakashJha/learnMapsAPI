@@ -19,7 +19,7 @@ function initMap() {
         {
             featureType: 'poi.park',
             elementType: 'geometry',
-            stylers: [{color: '#263c3f'}]
+            stylers: [{color: '#3aa724'}]
         },
         {
             featureType: 'poi.park',
@@ -29,7 +29,7 @@ function initMap() {
         {
             featureType: 'road',
             elementType: 'geometry',
-            stylers: [{color: '#38414e'}]
+            stylers: [{color: '#617287'}]
         },
         {
             featureType: 'road',
@@ -44,7 +44,7 @@ function initMap() {
         {
             featureType: 'road.highway',
             elementType: 'geometry',
-            stylers: [{color: '#746855'}]
+            stylers: [{color: '#fae3b6'}]
         },
         {
             featureType: 'road.highway',
@@ -59,7 +59,7 @@ function initMap() {
         {
             featureType: 'transit',
             elementType: 'geometry',
-            stylers: [{color: '#2f3948'}]
+            stylers: [{color: '#5d708d'}]
         },
         {
             featureType: 'transit.station',
@@ -73,7 +73,7 @@ function initMap() {
         {
             featureType: 'water',
             elementType: 'geometry',
-            stylers: [{color: '#17263c'}]
+            stylers: [{color: '#6395ff'}]
         },
         {
             featureType: 'water',
