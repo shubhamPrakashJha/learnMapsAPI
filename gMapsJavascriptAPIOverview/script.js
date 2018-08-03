@@ -67,6 +67,10 @@ function initMap() {
             stylers: [{color: '#d59563'}]
         },
         {
+            featureType: 'transit.station',
+            stylers: [{color: '#d59563'}, {weight: 9}]
+        },
+        {
             featureType: 'water',
             elementType: 'geometry',
             stylers: [{color: '#17263c'}]
@@ -89,7 +93,8 @@ function initMap() {
             lng: -73.9980244
         },
         zoom: 13,
-        styles: styles
+        styles: styles,
+        mapTypeControl: false
     });
     var locations = [
         {title: 'Park Ave Penthouse', location: {lat: 40.7713024, lng: -73.9632393}},
