@@ -6,14 +6,6 @@ body {
     padding: 0;
 }
 
-#map {
-    bottom: 0px;
-    height: 100%;
-    left: 362px;
-    position: absolute;
-    right: 0px;
-}
-
 .container {
     height: 100%;
     position: relative;
@@ -35,12 +27,19 @@ h1 {
     width: 48%;
 }
 
+hr {
+    background: #D0D7D9;
+    height: 1px;
+    margin: 20px 0 20px 0;
+    border: none;
+}
+
 #map {
-    bottom: 0px;
+    bottom:0;
     height: 100%;
     left: 362px;
     position: absolute;
-    right: 0px;
+    right: 0;
 }
 
 .options-box {
@@ -61,4 +60,10 @@ h1 {
 
 .text {
     font-size: 12px;
+}
+
+#toggle-drawing {
+    width: 27%;
+    position: relative;
+    margin-left: 10px;
 }

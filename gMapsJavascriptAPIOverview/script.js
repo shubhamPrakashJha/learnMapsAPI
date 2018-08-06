@@ -110,6 +110,15 @@ function initMap() {
 
     var largeInfoWindow = new google.maps.InfoWindow();
 
+    var drawingManager = new google.maps.drawing.DrawingManager({
+        drawingMode: google.maps.drawing.OverlayType.MARKER,
+        drawingControl: true,
+        drawingControlOptions: {
+            position: google.maps.ControlPosition.TOP_CENTER,
+            drawingModes: ['circle', 'polygon', 'rectangle']
+        }
+    });
+
     for (var i = 0; i < locations.length; i++) {
         var title = locations[i].title;
         var location = locations[i].location;
@@ -134,7 +143,12 @@ function initMap() {
 
         document.getElementById('show-listings').addEventListener('click',showListings);
         document.getElementById('hide-listings').addEventListener('click',hideListings);
+
     }
+
+    document.getElementById('toggle-drawing').addEventListener('click', function () {
+        toggleDrawing(drawingManager);
+    });
 
     function populateInfoWindow(marker, infowindow) {
         if(infowindow.marker !== marker){
@@ -194,6 +208,14 @@ function initMap() {
             scaledSize: new google.maps.Size(50,50)
         };
         return markerImage;
+    }
+
+    function toggleDrawing(drawingManager) {
+        if(drawingManager.map){
+            drawingManager.setMap(null);
+        }else {
+            drawingManager.setMap(map);
+        }
     }
 
     // var tribeca = {
