@@ -162,6 +162,7 @@ function initMap() {
         polygon = event.overlay;
         polygon.setEditable(true);
         polygon.setDraggable(true);
+        calculateArea(polygon);
         searchWithinPolygon();
         polygon.getPath().addListener('set_at', searchWithinPolygon);
         polygon.getPath().addListener('insert_at', searchWithinPolygon);
@@ -247,6 +248,11 @@ function initMap() {
                 markers[i].setMap(null);
             }
         }
+    }
+
+    function calculateArea(polygon) {
+        area = google.maps.geometry.spherical.computeArea(polygon.getPath());
+        window.alert(area + " Sq. Meters");
     }
 
     // var tribeca = {
