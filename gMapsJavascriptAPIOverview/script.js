@@ -130,7 +130,7 @@ function initMap() {
             position: location,
             icon: defaultIcon,
             title: title,
-            animation: google.maps.Animation.BOUNCE,
+            animation: google.maps.Animation.DROP,
             id: i
         });
         markers.push(marker);
@@ -143,11 +143,10 @@ function initMap() {
         marker.addListener('mouseout', function () {
             this.setIcon(defaultIcon);
         });
-
-        document.getElementById('show-listings').addEventListener('click',showListings);
-        document.getElementById('hide-listings').addEventListener('click',hideListings);
-
     }
+
+    document.getElementById('show-listings').addEventListener('click',showListings);
+    document.getElementById('hide-listings').addEventListener('click',hideListings);
 
     document.getElementById('toggle-drawing').addEventListener('click', function () {
         toggleDrawing(drawingManager);
