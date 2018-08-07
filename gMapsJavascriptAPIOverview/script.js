@@ -151,6 +151,10 @@ function initMap() {
     document.getElementById('toggle-drawing').addEventListener('click', function () {
         toggleDrawing(drawingManager);
     });
+    
+    document.getElementById('zoom-to-area').addEventListener('click', function () {
+        zoomToArea();
+    });
 
     drawingManager.addListener('overlaycomplete', function (event) {
         if(polygon){
@@ -252,6 +256,26 @@ function initMap() {
     function calculateArea(polygon) {
         area = google.maps.geometry.spherical.computeArea(polygon.getPath());
         window.alert(area + " Sq. Meters");
+    }
+
+    function zoomToArea() {
+        var geocoder = new google.maps.Geocoder();
+        var address = document.getElementById('zoom-to-area-text').value;
+        if (address === '') {
+            window.alert('You must enter an area, or address.');
+        } else {
+            geocoder.geocode({
+                address: address,
+                componentRestrictions: {locality: 'New York'}
+            }, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    map.setCenter(results[0].geometry.location);
+                    map.setZoom(15);
+                } else {
+                    window.alert('we Could not find that location - try entering a more specific place')
+                }
+            });
+        }
     }
 
     // var tribeca = {
