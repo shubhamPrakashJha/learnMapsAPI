@@ -21,6 +21,26 @@
             <input type="text" id="zoom-to-area-text" placeholder="Enter yor favourite area!">
             <input type="button" id="zoom-to-area" value="Zoom">
         </div>
+        <hr>
+        <div>
+            <span class="text">Within</span>
+            <select name="max-duration" id="max-duration">
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="30">30</option>
+                <option value="60">60</option>
+            </select>
+            <select name="mode" id="mode">
+                <option value="DRIVING">drive</option>
+                <option value="WALKING">walk</option>
+                <option value="BICYCLING">bike</option>
+                <option value="TRANSIT">transit ride</option>
+            </select>
+            <span class="text">of</span>
+            <input type="text" id="search-within-time-text"
+                   placeholder="Ex: Google Office NYC or 75 9th Ave, New York, NY">
+            <input type="button" id="search-within-time" value="Go">
+        </div>
     </div>
     <div id="map"></div>
 </div>
