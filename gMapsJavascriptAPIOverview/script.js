@@ -134,7 +134,7 @@ function initMap() {
             id: i
         });
         markers.push(marker);
-        marker.addListener('click',function () {
+        marker.addListener('click', function () {
             populateInfoWindow(this, largeInfoWindow)
         });
         marker.addListener('mouseover', function () {
@@ -145,8 +145,8 @@ function initMap() {
         });
     }
 
-    document.getElementById('show-listings').addEventListener('click',showListings);
-    document.getElementById('hide-listings').addEventListener('click',hideListings);
+    document.getElementById('show-listings').addEventListener('click', showListings);
+    document.getElementById('hide-listings').addEventListener('click', hideListings);
 
     document.getElementById('toggle-drawing').addEventListener('click', function () {
         toggleDrawing(drawingManager);
@@ -161,7 +161,7 @@ function initMap() {
     });
 
     drawingManager.addListener('overlaycomplete', function (event) {
-        if(polygon){
+        if (polygon) {
             polygon.setMap(null);
             hideListings();
         }
@@ -177,224 +177,224 @@ function initMap() {
     });
 }
 
-    function populateInfoWindow(marker, infowindow) {
-        if(infowindow.marker !== marker){
-            infowindow.marker = marker;
-            infowindow.setContent('');
-            infowindow.addListener('closeclick', function () {
-                infowindow.setMarker(null);
-            });
-            var streetViewService = new google.maps.StreetViewService();
-            var radius = 50;
+function populateInfoWindow(marker, infowindow) {
+    if (infowindow.marker !== marker) {
+        infowindow.marker = marker;
+        infowindow.setContent('');
+        infowindow.addListener('closeclick', function () {
+            infowindow.setMarker(null);
+        });
+        var streetViewService = new google.maps.StreetViewService();
+        var radius = 50;
 
-            function getStreetView(data, status) {
-                if(status === google.maps.StreetViewStatus.OK){
-                    var nearStreetViewLocation = data.location.latLng;
-                    var heading = google.maps.geometry.spherical.computeHeading(
-                        nearStreetViewLocation, marker.position);
-                    infowindow.setContent('<div>'+marker.title+'</div><div id="pano"></div>');
-                    var panoramaOptions = {
-                        position: nearStreetViewLocation,
-                        pov: {
-                            heading: heading,
-                            pitch: 30
-                        }
-                    };
-                    var panorama = new google.maps.StreetViewPanorama(
-                        document.getElementById('pano'), panoramaOptions);
-                }else {
-                    infowindow.setContent('<div>'+marker.title+'</div><div>No Street View Found</div>')
-                }
+        function getStreetView(data, status) {
+            if (status === google.maps.StreetViewStatus.OK) {
+                var nearStreetViewLocation = data.location.latLng;
+                var heading = google.maps.geometry.spherical.computeHeading(
+                    nearStreetViewLocation, marker.position);
+                infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+                var panoramaOptions = {
+                    position: nearStreetViewLocation,
+                    pov: {
+                        heading: heading,
+                        pitch: 30
+                    }
+                };
+                var panorama = new google.maps.StreetViewPanorama(
+                    document.getElementById('pano'), panoramaOptions);
+            } else {
+                infowindow.setContent('<div>' + marker.title + '</div><div>No Street View Found</div>')
             }
-            streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
-            infowindow.open(map,marker);
         }
-    }
 
-    function showListings() {
-        var bounds = new google.maps.LatLngBounds();
-        for(var i = 0; i < markers.length; i++){
+        streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+        infowindow.open(map, marker);
+    }
+}
+
+function showListings() {
+    var bounds = new google.maps.LatLngBounds();
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+        bounds.extend(markers[i].position);
+    }
+    map.fitBounds(bounds);
+}
+
+function hideListings() {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }
+}
+
+function makeMarkerIcon(markerColor) {
+    var markerImage = {
+        url: "http://maps.google.com/mapfiles/ms/icons/" + markerColor + ".png",
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(50, 50)
+    };
+    return markerImage;
+}
+
+function toggleDrawing(drawingManager) {
+    if (drawingManager.map) {
+        drawingManager.setMap(null);
+        if (polygon) {
+            polygon.setMap(null);
+        }
+    } else {
+        drawingManager.setMap(map);
+    }
+}
+
+function searchWithinPolygon() {
+    for (var i = 0; i < markers.length; i++) {
+        if (google.maps.geometry.poly.containsLocation(markers[i].position, polygon)) {
             markers[i].setMap(map);
-            bounds.extend(markers[i].position);
-        }
-        map.fitBounds(bounds);
-    }
-
-    function hideListings() {
-        for(var i = 0; i < markers.length; i++){
+        } else {
             markers[i].setMap(null);
         }
     }
+}
 
-    function makeMarkerIcon(markerColor) {
-        var markerImage = {
-            url: "http://maps.google.com/mapfiles/ms/icons/"+markerColor+".png",
-            size: new google.maps.Size(71,71),
-            origin: new google.maps.Point(0,0),
-            anchor: new google.maps.Point(17,34),
-            scaledSize: new google.maps.Size(50,50)
-        };
-        return markerImage;
-    }
+function calculateArea(polygon) {
+    area = google.maps.geometry.spherical.computeArea(polygon.getPath());
+    window.alert(area + " Sq. Meters");
+}
 
-    function toggleDrawing(drawingManager) {
-        if(drawingManager.map){
-            drawingManager.setMap(null);
-            if(polygon){
-                polygon.setMap(null);
+function zoomToArea() {
+    var geocoder = new google.maps.Geocoder();
+    var address = document.getElementById('zoom-to-area-text').value;
+    if (address === '') {
+        window.alert('You must enter an area, or address.');
+    } else {
+        geocoder.geocode({
+            address: address,
+            componentRestrictions: {locality: 'New York'}
+        }, function (results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                map.setCenter(results[0].geometry.location);
+                map.setZoom(15);
+            } else {
+                window.alert('we Could not find that location - try entering a more specific place')
             }
-        }else {
-            drawingManager.setMap(map);
-        }
+        });
     }
+}
 
-    function searchWithinPolygon() {
-        for(var i =0; i< markers.length; i++){
-            if(google.maps.geometry.poly.containsLocation(markers[i].position, polygon)){
-                markers[i].setMap(map);
-            }else {
-                markers[i].setMap(null);
-            }
-        }
-    }
-
-    function calculateArea(polygon) {
-        area = google.maps.geometry.spherical.computeArea(polygon.getPath());
-        window.alert(area + " Sq. Meters");
-    }
-
-    function zoomToArea() {
-        var geocoder = new google.maps.Geocoder();
-        var address = document.getElementById('zoom-to-area-text').value;
-        if (address === '') {
-            window.alert('You must enter an area, or address.');
-        } else {
-            geocoder.geocode({
-                address: address,
-                componentRestrictions: {locality: 'New York'}
-            }, function (results, status) {
-                if (status === google.maps.GeocoderStatus.OK) {
-                    map.setCenter(results[0].geometry.location);
-                    map.setZoom(15);
-                } else {
-                    window.alert('we Could not find that location - try entering a more specific place')
-                }
-            });
-        }
-    }
-
-    function searchWithinTime() {
-        var distanceMatrixService = new google.maps.DistanceMatrixService();
-        var address = document.getElementById('search-within-time-text').value;
-        if (address === ''){
-            window.alert('You must enter an address.')
-        }else {
-            hideListings();
-            var origins = [];
-            for(var i =0; i < markers.length; i++){
-                origins[i] = markers[i].position;
-            }
-            var destination = address;
-            var mode = document.getElementById('mode').value;
-            distanceMatrixService.getDistanceMatrix({
-                origins: origins,
-                destinations: [destination],
-                travelMode: mode,
-                unitSystem: google.maps.UnitSystem.IMPERIAL
-            }, function (response, status) {
-                if (status !== google.maps.DistanceMatrixStatus.OK) {
-                    window.alert('Error was:' + status);
-                } else {
-                    // console.log(response);
-                    displayMarkersWithinTime(response);
-                }
-            })
-        }
-    }
-
-    function displayMarkersWithinTime(response) {
-        var maxDuration = document.getElementById('max-duration').value;
-        var origins = response.originAddresses;
-        var destinations = response.destinationAddresses;
-        var atLeastOne = false;
-        console.log(response);
-        for (var i = 0; i < origins.length; i++) {
-            results = response.rows[i].elements;
-            for (var j = 0; j < results.length; j++) {
-                var element = results[j];
-                if (element.status === "OK") {
-                    var distanceText = element.distance.text;
-                    var duration = element.distance.value / 60;
-                    var durationText = element.duration.text;
-                    if (duration <= maxDuration) {
-                        markers[i].setMap(map);
-                        atLeastOne = true;
-                        var infowindow = new google.maps.InfoWindow({
-                            content: durationText + ' away, ' + distanceText +
-                            '<br><br>' +
-                            '<div>' +
-                            '<input type=\"button\" value=\"View Route\" onclick=\"displayDirections(&quot;' + origins[i] + '&quot;)\">' +
-                            '</div>'
-                        });
-                        infowindow.open(map, markers[i]);
-
-                        markers[i].infowindow = infowindow;
-                        google.maps.event.addListener(markers[i], 'click', function () {
-                            this.infowindow.close();
-                        });
-
-                    }
-                }
-            }
-        }
-        if(!atLeastOne){
-            window.alert('We Could Not Find Any Location Within that Distance');
-        }
-    }
-
-    function displayDirections(origin) {
+function searchWithinTime() {
+    var distanceMatrixService = new google.maps.DistanceMatrixService();
+    var address = document.getElementById('search-within-time-text').value;
+    if (address === '') {
+        window.alert('You must enter an address.')
+    } else {
         hideListings();
-        var directoinsService = new google.maps.DirectionsService();
-        var destinationAddress = document.getElementById('search-within-time-text').value;
+        var origins = [];
+        for (var i = 0; i < markers.length; i++) {
+            origins[i] = markers[i].position;
+        }
+        var destination = address;
         var mode = document.getElementById('mode').value;
-        directoinsService.route({
-            origin: origin,
-            destination: destinationAddress,
-            travelMode: google.maps.TravelMode[mode]
-        }, function (result, status) {
-            if(status === google.maps.DirectionsStatus.OK){
-                directionDisplay = new google.maps.DirectionsRenderer({
-                    map: map,
-                    directions: result,
-                    draggable: true,
-                    polylineOptions: {
-                        strokeColor: 'red'
-                    }
-                })
-            }else {
-                window.alert('Direction request failed due to' + status);
+        distanceMatrixService.getDistanceMatrix({
+            origins: origins,
+            destinations: [destination],
+            travelMode: mode,
+            unitSystem: google.maps.UnitSystem.IMPERIAL
+        }, function (response, status) {
+            if (status !== google.maps.DistanceMatrixStatus.OK) {
+                window.alert('Error was:' + status);
+            } else {
+                // console.log(response);
+                displayMarkersWithinTime(response);
             }
         })
-
     }
+}
+
+function displayMarkersWithinTime(response) {
+    var maxDuration = document.getElementById('max-duration').value;
+    var origins = response.originAddresses;
+    var destinations = response.destinationAddresses;
+    var atLeastOne = false;
+    console.log(response);
+    for (var i = 0; i < origins.length; i++) {
+        results = response.rows[i].elements;
+        for (var j = 0; j < results.length; j++) {
+            var element = results[j];
+            if (element.status === "OK") {
+                var distanceText = element.distance.text;
+                var duration = element.distance.value / 60;
+                var durationText = element.duration.text;
+                if (duration <= maxDuration) {
+                    markers[i].setMap(map);
+                    atLeastOne = true;
+                    var infowindow = new google.maps.InfoWindow({
+                        content: durationText + ' away, ' + distanceText +
+                        '<br><br>' +
+                        '<div>' +
+                        '<input type=\"button\" value=\"View Route\" onclick=\"displayDirections(&quot;' + origins[i] + '&quot;)\">' +
+                        '</div>'
+                    });
+                    infowindow.open(map, markers[i]);
+
+                    markers[i].infowindow = infowindow;
+                    google.maps.event.addListener(markers[i], 'click', function () {
+                        this.infowindow.close();
+                    });
+
+                }
+            }
+        }
+    }
+    if (!atLeastOne) {
+        window.alert('We Could Not Find Any Location Within that Distance');
+    }
+}
+
+function displayDirections(origin) {
+    hideListings();
+    var directoinsService = new google.maps.DirectionsService();
+    var destinationAddress = document.getElementById('search-within-time-text').value;
+    var mode = document.getElementById('mode').value;
+    directoinsService.route({
+        origin: origin,
+        destination: destinationAddress,
+        travelMode: google.maps.TravelMode[mode]
+    }, function (result, status) {
+        if (status === google.maps.DirectionsStatus.OK) {
+            directionDisplay = new google.maps.DirectionsRenderer({
+                map: map,
+                directions: result,
+                draggable: true,
+                polylineOptions: {
+                    strokeColor: 'red'
+                }
+            })
+        } else {
+            window.alert('Direction request failed due to' + status);
+        }
+    })
+
+}
 
 
-
-    // var tribeca = {
-    //     lat: 40.719526,
-    //     lng: -74.0089934
-    // };
-    // var marker = new google.maps.Marker({
-    //     position: tribeca,
-    //     map: map,
-    //     title: "First Marker",
-    //     draggable: true,
-    //     animation: google.maps.Animation.DROP
-    // });
-    // var infoWindow = new google.maps.InfoWindow({
-    //     content: "This is a Info Window displaying info about the marker"
-    // });
-    //
-    // marker.addListener('click', function () {
-    //     infoWindow.open(map,marker);
-    // });
+// var tribeca = {
+//     lat: 40.719526,
+//     lng: -74.0089934
+// };
+// var marker = new google.maps.Marker({
+//     position: tribeca,
+//     map: map,
+//     title: "First Marker",
+//     draggable: true,
+//     animation: google.maps.Animation.DROP
+// });
+// var infoWindow = new google.maps.InfoWindow({
+//     content: "This is a Info Window displaying info about the marker"
+// });
+//
+// marker.addListener('click', function () {
+//     infoWindow.open(map,marker);
+// });
