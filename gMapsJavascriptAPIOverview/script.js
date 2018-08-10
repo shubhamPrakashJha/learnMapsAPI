@@ -97,6 +97,12 @@ function initMap() {
         styles: styles,
         mapTypeControl: false
     });
+
+    // Add Auto Complete feature to input boxes.
+    var timeAutoComplete = new google.maps.places.Autocomplete(document.getElementById('search-within-time-text'));
+    var zoomAutoComplete = new google.maps.places.Autocomplete(document.getElementById('zoom-to-area-text'));
+    zoomAutoComplete.bindTo('bounds', map);
+
     var locations = [
         {title: 'Park Ave Penthouse', location: {lat: 40.7713024, lng: -73.9632393}},
         {title: 'Chelsea Loft', location: {lat: 40.7444883, lng: -73.9949465}},
