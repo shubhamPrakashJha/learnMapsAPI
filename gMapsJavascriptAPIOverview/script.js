@@ -151,7 +151,7 @@ function initMap() {
     document.getElementById('toggle-drawing').addEventListener('click', function () {
         toggleDrawing(drawingManager);
     });
-    
+
     document.getElementById('zoom-to-area').addEventListener('click', function () {
         zoomToArea();
     });
@@ -175,6 +175,7 @@ function initMap() {
         polygon.getPath().addListener('insert_at', searchWithinPolygon);
 
     });
+}
 
     function populateInfoWindow(marker, infowindow) {
         if(infowindow.marker !== marker){
@@ -329,7 +330,11 @@ function initMap() {
                         markers[i].setMap(map);
                         atLeastOne = true;
                         var infowindow = new google.maps.InfoWindow({
-                            content: durationText + ' away, ' + distanceText
+                            content: durationText + ' away, ' + distanceText +
+                            '<br><br>' +
+                            '<div>' +
+                            '<input type=\"button\" value=\"View Route\" onclick=\"displayDirections(&quot;' + origins[i] + '&quot;)\">' +
+                            '</div>'
                         });
                         infowindow.open(map, markers[i]);
 
@@ -342,7 +347,38 @@ function initMap() {
                 }
             }
         }
+        if(!atLeastOne){
+            window.alert('We Could Not Find Any Location Within that Distance');
+        }
     }
+
+    function displayDirections(origin) {
+        hideListings();
+        var directoinsService = new google.maps.DirectionsService();
+        var destinationAddress = document.getElementById('search-within-time-text').value;
+        var mode = document.getElementById('mode').value;
+        directoinsService.route({
+            origin: origin,
+            destination: destinationAddress,
+            travelMode: google.maps.TravelMode[mode]
+        }, function (result, status) {
+            if(status === google.maps.DirectionsStatus.OK){
+                directionDisplay = new google.maps.DirectionsRenderer({
+                    map: map,
+                    directions: result,
+                    draggable: true,
+                    polylineOptions: {
+                        strokeColor: 'red'
+                    }
+                })
+            }else {
+                window.alert('Direction request failed due to' + status);
+            }
+        })
+
+    }
+
+
 
     // var tribeca = {
     //     lat: 40.719526,
@@ -362,4 +398,3 @@ function initMap() {
     // marker.addListener('click', function () {
     //     infoWindow.open(map,marker);
     // });
-}
