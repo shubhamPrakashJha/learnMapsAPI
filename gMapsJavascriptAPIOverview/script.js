@@ -320,6 +320,7 @@ function initMap() {
         for (var i = 0; i < origins.length; i++) {
             results = response.rows[i].elements;
             for (var j = 0; j < results.length; j++) {
+                var element = results[j];
                 if (element.status === "OK") {
                     var distanceText = element.distance.text;
                     var duration = element.distance.value / 60;
